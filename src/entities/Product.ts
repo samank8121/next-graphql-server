@@ -3,9 +3,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Cart } from './Cart';
 
 @Entity()
 export class Product extends BaseEntity {
@@ -32,6 +34,9 @@ export class Product extends BaseEntity {
 
   @Column()
   imageSrc: string;
+
+  @ManyToMany(() => Cart, (cart) => cart.products)
+  carts: Cart[]
 
   @CreateDateColumn()
   createdAt: Date;

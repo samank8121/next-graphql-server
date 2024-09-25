@@ -28,6 +28,10 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  Cart: { // root type
+    id: number; // Int!
+    userId: string; // String!
+  }
   Mutation: {};
   Product: { // root type
     caption: string; // String!
@@ -40,6 +44,12 @@ export interface NexusGenObjects {
     weight: string; // String!
   }
   Query: {};
+  User: { // root type
+    email: string; // String!
+    id: number; // Int!
+    password: string; // String!
+    username: string; // String!
+  }
 }
 
 export interface NexusGenInterfaces {
@@ -53,7 +63,13 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  Cart: { // field return type
+    id: number; // Int!
+    user: NexusGenRootTypes['User']; // User!
+    userId: string; // String!
+  }
   Mutation: { // field return type
+    addProductToCart: NexusGenRootTypes['Cart'] | null; // Cart
     createProduct: NexusGenRootTypes['Product']; // Product!
   }
   Product: { // field return type
@@ -67,12 +83,27 @@ export interface NexusGenFieldTypes {
     weight: string; // String!
   }
   Query: { // field return type
+    carts: NexusGenRootTypes['Cart'][]; // [Cart!]!
     products: NexusGenRootTypes['Product'][]; // [Product!]!
+    users: NexusGenRootTypes['User'][]; // [User!]!
+  }
+  User: { // field return type
+    cart: NexusGenRootTypes['Cart']; // Cart!
+    email: string; // String!
+    id: number; // Int!
+    password: string; // String!
+    username: string; // String!
   }
 }
 
 export interface NexusGenFieldTypeNames {
+  Cart: { // field return type name
+    id: 'Int'
+    user: 'User'
+    userId: 'String'
+  }
   Mutation: { // field return type name
+    addProductToCart: 'Cart'
     createProduct: 'Product'
   }
   Product: { // field return type name
@@ -86,12 +117,25 @@ export interface NexusGenFieldTypeNames {
     weight: 'String'
   }
   Query: { // field return type name
+    carts: 'Cart'
     products: 'Product'
+    users: 'User'
+  }
+  User: { // field return type name
+    cart: 'Cart'
+    email: 'String'
+    id: 'Int'
+    password: 'String'
+    username: 'String'
   }
 }
 
 export interface NexusGenArgTypes {
   Mutation: {
+    addProductToCart: { // args
+      cartId: number; // Int!
+      productId: number; // Int!
+    }
     createProduct: { // args
       caption: string; // String!
       description?: string | null; // String

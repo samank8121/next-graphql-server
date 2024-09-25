@@ -3,9 +3,11 @@ import {
     Column,
     CreateDateColumn,
     Entity,
+    OneToOne,
     PrimaryGeneratedColumn,
     UpdateDateColumn,
   } from "typeorm";
+import { Cart } from "./Cart";
   
   @Entity()
   export class User extends BaseEntity {
@@ -21,6 +23,12 @@ import {
     @Column()
     password!: string;
   
+    @Column()
+    cartId: string;
+
+    @OneToOne(() => Cart, (cart) => cart.user)
+    cart: Cart;
+
     @CreateDateColumn()
     createdAt: Date;
   

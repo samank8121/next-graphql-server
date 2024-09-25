@@ -2,7 +2,14 @@
 ### Do not make changes to this file directly
 
 
+type Cart {
+  id: Int!
+  user: User!
+  userId: String!
+}
+
 type Mutation {
+  addProductToCart(cartId: Int!, productId: Int!): Cart
   createProduct(caption: String!, description: String, price: Float!, rate: Int, slug: String!, weight: String!): Product!
 }
 
@@ -18,5 +25,15 @@ type Product {
 }
 
 type Query {
+  carts: [Cart!]!
   products(slug: String): [Product!]!
+  users: [User!]!
+}
+
+type User {
+  cart: Cart!
+  email: String!
+  id: Int!
+  password: String!
+  username: String!
 }

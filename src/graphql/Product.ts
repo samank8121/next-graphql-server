@@ -1,7 +1,6 @@
 import { extendType, floatArg, intArg, nonNull, objectType, stringArg } from 'nexus';
 import { Product } from '../entities/Product';
 import { Context } from '../types/Context';
-//import { User } from '../entities/User';
 
 export const ProductType = objectType({
   name: "Product",
@@ -13,14 +12,7 @@ export const ProductType = objectType({
     t.nonNull.string("weight");
     t.int("rate");
     t.string("description");
-    t.string("imageSrc");
-    // t.nonNull.int("creatorId");
-    // t.field("createdBy", {
-    //   type: "User",
-    //   resolve(parent, _args, _context): Promise<User | null> {
-    //     return User.findOne({ where: { id: parent.creatorId } });
-    //   },
-    // });
+    t.string("imageSrc");    
   },
 });
 
