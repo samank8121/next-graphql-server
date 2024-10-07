@@ -23,7 +23,7 @@ import { Cart } from "./Cart";
     @Column()
     password!: string;
   
-    @Column()
+    @Column({ nullable: true })
     cartId: string;
 
     @OneToOne(() => Cart, (cart) => cart.user)

@@ -9,8 +9,6 @@ export const auth = (header: string): AuthTokenPayload => {
   if (!token) {
     throw new Error("Invalid token.");
   }
-  // const res = jwt.verify(token, process.env.TOKEN_SECRET as jwt.Secret);
-  // console.log(res);
 
   return jwt.verify(
     token,

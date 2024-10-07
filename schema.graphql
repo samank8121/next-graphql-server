@@ -2,15 +2,30 @@
 ### Do not make changes to this file directly
 
 
+type AuthenticationType {
+  token: String!
+  user: User!
+}
+
 type Cart {
+  cartProducts: [CartProduct]
   id: Int!
   user: User!
   userId: String!
 }
 
+type CartProduct {
+  cart: Cart
+  id: Int!
+  product: Product
+  productCount: Int!
+}
+
 type Mutation {
-  addProductToCart(cartId: Int!, productId: Int!): Cart
+  addProductToCart(productId: Int!): Cart
   createProduct(caption: String!, description: String, price: Float!, rate: Int, slug: String!, weight: String!): Product!
+  login(password: String!, username: String!): AuthenticationType!
+  register(email: String!, password: String!, username: String!): AuthenticationType!
 }
 
 type Product {

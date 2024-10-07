@@ -28,9 +28,17 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  AuthenticationType: { // root type
+    token: string; // String!
+    user: NexusGenRootTypes['User']; // User!
+  }
   Cart: { // root type
     id: number; // Int!
     userId: string; // String!
+  }
+  CartProduct: { // root type
+    id: number; // Int!
+    productCount: number; // Int!
   }
   Mutation: {};
   Product: { // root type
@@ -63,14 +71,27 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  AuthenticationType: { // field return type
+    token: string; // String!
+    user: NexusGenRootTypes['User']; // User!
+  }
   Cart: { // field return type
+    cartProducts: Array<NexusGenRootTypes['CartProduct'] | null> | null; // [CartProduct]
     id: number; // Int!
     user: NexusGenRootTypes['User']; // User!
     userId: string; // String!
   }
+  CartProduct: { // field return type
+    cart: NexusGenRootTypes['Cart'] | null; // Cart
+    id: number; // Int!
+    product: NexusGenRootTypes['Product'] | null; // Product
+    productCount: number; // Int!
+  }
   Mutation: { // field return type
     addProductToCart: NexusGenRootTypes['Cart'] | null; // Cart
     createProduct: NexusGenRootTypes['Product']; // Product!
+    login: NexusGenRootTypes['AuthenticationType']; // AuthenticationType!
+    register: NexusGenRootTypes['AuthenticationType']; // AuthenticationType!
   }
   Product: { // field return type
     caption: string; // String!
@@ -97,14 +118,27 @@ export interface NexusGenFieldTypes {
 }
 
 export interface NexusGenFieldTypeNames {
+  AuthenticationType: { // field return type name
+    token: 'String'
+    user: 'User'
+  }
   Cart: { // field return type name
+    cartProducts: 'CartProduct'
     id: 'Int'
     user: 'User'
     userId: 'String'
   }
+  CartProduct: { // field return type name
+    cart: 'Cart'
+    id: 'Int'
+    product: 'Product'
+    productCount: 'Int'
+  }
   Mutation: { // field return type name
     addProductToCart: 'Cart'
     createProduct: 'Product'
+    login: 'AuthenticationType'
+    register: 'AuthenticationType'
   }
   Product: { // field return type name
     caption: 'String'
@@ -133,7 +167,6 @@ export interface NexusGenFieldTypeNames {
 export interface NexusGenArgTypes {
   Mutation: {
     addProductToCart: { // args
-      cartId: number; // Int!
       productId: number; // Int!
     }
     createProduct: { // args
@@ -143,6 +176,15 @@ export interface NexusGenArgTypes {
       rate?: number | null; // Int
       slug: string; // String!
       weight: string; // String!
+    }
+    login: { // args
+      password: string; // String!
+      username: string; // String!
+    }
+    register: { // args
+      email: string; // String!
+      password: string; // String!
+      username: string; // String!
     }
   }
   Query: {

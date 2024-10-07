@@ -6,11 +6,10 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
   OneToOne,
-  ManyToMany,
-  JoinTable,
+  OneToMany,
 } from 'typeorm';
 import { User } from './User';
-import { Product } from './Product';
+import { CartProduct } from './CartProduct';
 
 @Entity()
 export class Cart extends BaseEntity {
@@ -23,9 +22,8 @@ export class Cart extends BaseEntity {
   @OneToOne(() => User, (user) => user.cart)
   user: User;
 
-  @ManyToMany(() => Product, (product) => product.carts)
-  @JoinTable()
-  products: Product[]
+  @OneToMany(() => CartProduct, (cartProduct) => cartProduct.cart)
+  cartProducts!: CartProduct[];
   
   @CreateDateColumn()
   createdAt: Date;

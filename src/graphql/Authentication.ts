@@ -4,13 +4,13 @@ import { Context } from '../types/Context';
 import * as jwt from 'jsonwebtoken';
 import argon2 from 'argon2';
 
-export const AuthType = objectType({
-  name: 'AuthType',
+export const AuthenticationType = objectType({
+  name: 'AuthenticationType',
   definition(t) {
     t.nonNull.string('token'),
-      t.nonNull.field('user', {
-        type: 'User',
-      });
+    t.nonNull.field('user', {
+      type: 'User',
+    });
   },
 });
 
@@ -18,7 +18,7 @@ export const AuthMutation = extendType({
   type: 'Mutation',
   definition(t) {
     t.nonNull.field('login', {
-      type: 'AuthType',
+      type: 'AuthenticationType',
       args: {
         username: nonNull(stringArg()),
         password: nonNull(stringArg()),
@@ -50,7 +50,7 @@ export const AuthMutation = extendType({
     });
 
     t.nonNull.field('register', {
-      type: 'AuthType',
+      type: 'AuthenticationType',
       args: {
         username: nonNull(stringArg()),
         email: nonNull(stringArg()),
@@ -58,6 +58,13 @@ export const AuthMutation = extendType({
       },
       async resolve(_parent, args, context: Context, _info) {
         const { username, password, email } = args;
+        const duplicateUser = await User.findOne({
+          where: [{ username: username }, { email: email }],
+        });
+        if(duplicateUser)
+        {
+          throw new Error("Duplicate user"); 
+        }
         const hashedPassword = await argon2.hash(password);
         let user;
         let token;

@@ -2,6 +2,8 @@ import { extendType, intArg, nonNull, objectType } from "nexus";
 import { User } from "../entities/User";
 import { Cart } from "../entities/Cart";
 import { Product } from "../entities/Product";
+import { Context } from "../types/Context";
+import { CartProduct } from "../entities/CartProduct";
 
 export const CartType = objectType({
   name: "Cart",
@@ -12,6 +14,14 @@ export const CartType = objectType({
       type: "User",
       resolve(parent, _args, _context): Promise<User[]> {
         return User.find({ where: { id: parent.userId } });
+      },
+    });
+    t.list.field("cartProducts", {
+      type: "CartProduct",
+      resolve(parent, _args, _context) {
+        return CartProduct.find({
+          where: { cartId: parent.id },
+        });
       },
     });
   },
@@ -34,13 +44,18 @@ export const CartMutations = extendType({
     t.field("addProductToCart", {
       type: "Cart",
       args: {
-        cartId: nonNull(intArg()),
         productId: nonNull(intArg()),
       },
-      async resolve(_parent, { cartId, productId }, _context) {
-        const cart = await Cart.findOne({ where: { id: cartId }, relations: ["products"] });
+      async resolve(_parent, { productId }, context: Context) {
+        const { userId } = context;
+
+        if (!userId) {
+          throw new Error("Can't add product to cart without logging in.");
+        }
+
+        let cart = await Cart.findOne({ where: { userId: userId }, relations: ["cartProducts"] });
         if (!cart) {
-          throw new Error("Cart not found");
+          cart = await Cart.create({ userId }).save();
         }
 
         const product = await Product.findOne({ where: { id: productId } });
@@ -48,18 +63,22 @@ export const CartMutations = extendType({
           throw new Error("Product not found");
         }
 
-        if (!cart.products) {
-          cart.products = [];
-        }
+        let cartProduct = await CartProduct.findOne({
+          where: { cart: { id: cart.id }, product: { id: productId } },
+        });
 
-        const productAlreadyInCart = cart.products.some((p) => p.id === productId);
-        if (!productAlreadyInCart) {
-          cart.products.push(product);
+        if (cartProduct) {
+          cartProduct.productCount += 1;
+          await cartProduct.save();
         } else {
-          throw new Error("Product is already in the cart");
+          cartProduct = await CartProduct.create({
+            cart: cart,
+            product: product,
+            productCount: 1, 
+          }).save();
         }
-        await cart.save();
 
+        cart = await Cart.findOne({ where: { id: cart.id }, relations: ["cartProducts", "cartProducts.product"] });
         return cart;
       },
     });

@@ -15,12 +15,6 @@ export const UserType = objectType({
         return Cart.find({ where: { id: parent.cartId } });
       },
     });
-    // t.nonNull.list.nonNull.field("products", {
-    //   type: "Product",
-    //   resolve(parent, _args, _context): Promise<Product[]> {
-    //     return Product.find({ where: { id: parent.id } });
-    //   },
-    // });
   },
 });
 export const UsersQuery = extendType({
