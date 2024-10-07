@@ -39,7 +39,7 @@ export const AuthMutation = extendType({
 
         const token = jwt.sign(
           { userId: user.id },
-          process.env.TOKEN_SECRET as jwt.Secret
+          process.env.TOKEN_SECRET_KEY as jwt.Secret
         );
 
         return {
@@ -83,7 +83,7 @@ export const AuthMutation = extendType({
           user = result.raw[0];
           token = await jwt.sign(
             { userId: user.id },
-            process.env.TOKEN_SECRET as jwt.Secret
+            process.env.TOKEN_SECRET_KEY as jwt.Secret
           );
         } catch (err) {
           console.log(err);
