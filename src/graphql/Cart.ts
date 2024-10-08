@@ -41,12 +41,13 @@ export const CartsQuery = extendType({
 export const CartMutations = extendType({
   type: "Mutation",
   definition(t) {
-    t.field("addProductToCart", {
+    t.field("changeProductofCart", {
       type: "Cart",
       args: {
         productId: nonNull(intArg()),
+        count: nonNull(intArg()),
       },
-      async resolve(_parent, { productId }, context: Context) {
+      async resolve(_parent, { productId, count }, context: Context) {
         const { userId } = context;
 
         if (!userId) {
@@ -68,13 +69,17 @@ export const CartMutations = extendType({
         });
 
         if (cartProduct) {
-          cartProduct.productCount += 1;
-          await cartProduct.save();
+          if (count === 0) {
+            await cartProduct.remove();
+          } else {
+            cartProduct.productCount = count;
+            await cartProduct.save();
+          }
         } else {
           cartProduct = await CartProduct.create({
             cart: cart,
             product: product,
-            productCount: 1, 
+            productCount: 1,
           }).save();
         }
 

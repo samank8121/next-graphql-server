@@ -22,7 +22,7 @@ type CartProduct {
 }
 
 type Mutation {
-  addProductToCart(productId: Int!): Cart
+  changeProductofCart(count: Int!, productId: Int!): Cart
   createProduct(caption: String!, description: String, price: Float!, rate: Int, slug: String!, weight: String!): Product!
   login(password: String!, username: String!): AuthenticationType!
   register(email: String!, password: String!, username: String!): AuthenticationType!
