@@ -8,9 +8,9 @@ export const AuthenticationType = objectType({
   name: 'AuthenticationType',
   definition(t) {
     t.nonNull.string('token'),
-    t.nonNull.field('user', {
-      type: 'User',
-    });
+      t.nonNull.field('user', {
+        type: 'User',
+      });
   },
 });
 
@@ -61,9 +61,8 @@ export const AuthMutation = extendType({
         const duplicateUser = await User.findOne({
           where: [{ username: username }, { email: email }],
         });
-        if(duplicateUser)
-        {
-          throw new Error("Duplicate user"); 
+        if (duplicateUser) {
+          throw new Error('Duplicate user');
         }
         const hashedPassword = await argon2.hash(password);
         let user;

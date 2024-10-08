@@ -1,23 +1,23 @@
-import { extendType, intArg, nonNull, objectType } from "nexus";
-import { User } from "../entities/User";
-import { Cart } from "../entities/Cart";
-import { Product } from "../entities/Product";
-import { Context } from "../types/Context";
-import { CartProduct } from "../entities/CartProduct";
+import { extendType, intArg, nonNull, objectType } from 'nexus';
+import { User } from '../entities/User';
+import { Cart } from '../entities/Cart';
+import { Product } from '../entities/Product';
+import { Context } from '../types/Context';
+import { CartProduct } from '../entities/CartProduct';
 
 export const CartType = objectType({
-  name: "Cart",
+  name: 'Cart',
   definition(t) {
-    t.nonNull.int("id");
-    t.nonNull.string("userId");
-    t.nonNull.field("user", {
-      type: "User",
+    t.nonNull.int('id');
+    t.nonNull.string('userId');
+    t.nonNull.field('user', {
+      type: 'User',
       resolve(parent, _args, _context): Promise<User[]> {
         return User.find({ where: { id: parent.userId } });
       },
     });
-    t.list.field("cartProducts", {
-      type: "CartProduct",
+    t.list.field('cartProducts', {
+      type: 'CartProduct',
       resolve(parent, _args, _context) {
         return CartProduct.find({
           where: { cartId: parent.id },
@@ -39,10 +39,10 @@ export const CartsQuery = extendType({
 });
 
 export const CartMutations = extendType({
-  type: "Mutation",
+  type: 'Mutation',
   definition(t) {
-    t.field("changeProductofCart", {
-      type: "Cart",
+    t.field('changeProductofCart', {
+      type: 'Cart',
       args: {
         productId: nonNull(intArg()),
         count: nonNull(intArg()),
@@ -54,14 +54,17 @@ export const CartMutations = extendType({
           throw new Error("Can't add product to cart without logging in.");
         }
 
-        let cart = await Cart.findOne({ where: { userId: userId }, relations: ["cartProducts"] });
+        let cart = await Cart.findOne({
+          where: { userId: userId },
+          relations: ['cartProducts'],
+        });
         if (!cart) {
           cart = await Cart.create({ userId }).save();
         }
 
         const product = await Product.findOne({ where: { id: productId } });
         if (!product) {
-          throw new Error("Product not found");
+          throw new Error('Product not found');
         }
 
         let cartProduct = await CartProduct.findOne({
@@ -83,7 +86,10 @@ export const CartMutations = extendType({
           }).save();
         }
 
-        cart = await Cart.findOne({ where: { id: cart.id }, relations: ["cartProducts", "cartProducts.product"] });
+        cart = await Cart.findOne({
+          where: { id: cart.id },
+          relations: ['cartProducts', 'cartProducts.product'],
+        });
         return cart;
       },
     });

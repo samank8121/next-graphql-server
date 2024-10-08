@@ -1,18 +1,25 @@
-import { extendType, floatArg, intArg, nonNull, objectType, stringArg } from 'nexus';
+import {
+  extendType,
+  floatArg,
+  intArg,
+  nonNull,
+  objectType,
+  stringArg,
+} from 'nexus';
 import { Product } from '../entities/Product';
 import { Context } from '../types/Context';
 
 export const ProductType = objectType({
-  name: "Product",
+  name: 'Product',
   definition(t) {
-    t.nonNull.int("id");
-    t.nonNull.string("caption");
-    t.nonNull.float("price");
-    t.nonNull.string("slug");
-    t.nonNull.string("weight");
-    t.int("rate");
-    t.string("description");
-    t.string("imageSrc");    
+    t.nonNull.int('id');
+    t.nonNull.string('caption');
+    t.nonNull.float('price');
+    t.nonNull.string('slug');
+    t.nonNull.string('weight');
+    t.int('rate');
+    t.string('description');
+    t.string('imageSrc');
   },
 });
 
@@ -33,10 +40,10 @@ export const ProductsQuery = extendType({
   },
 });
 export const ProductMutation = extendType({
-  type: "Mutation",
+  type: 'Mutation',
   definition(t) {
-    t.nonNull.field("createProduct", {
-      type: "Product",
+    t.nonNull.field('createProduct', {
+      type: 'Product',
       args: {
         caption: nonNull(stringArg()),
         price: nonNull(floatArg()),
@@ -46,9 +53,16 @@ export const ProductMutation = extendType({
         description: stringArg(),
       },
       resolve(_parent, args, _context: Context, _info): Promise<Product> {
-        const { caption, price,slug, weight, rate, description } = args;        
-        return Product.create({ caption, price, slug, weight, rate, description }).save();
+        const { caption, price, slug, weight, rate, description } = args;
+        return Product.create({
+          caption,
+          price,
+          slug,
+          weight,
+          rate,
+          description,
+        }).save();
       },
     });
-  }
+  },
 });

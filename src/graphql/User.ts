@@ -1,16 +1,16 @@
-import { extendType, objectType } from "nexus";
-import { Cart } from "../entities/Cart";
-import { User } from "../entities/User";
+import { extendType, objectType } from 'nexus';
+import { Cart } from '../entities/Cart';
+import { User } from '../entities/User';
 
 export const UserType = objectType({
-  name: "User",
+  name: 'User',
   definition(t) {
-    t.nonNull.int("id");
-    t.nonNull.string("username");
-    t.nonNull.string("email");
-    t.nonNull.string("password");
-    t.nonNull.field("cart", {
-      type: "Cart",
+    t.nonNull.int('id');
+    t.nonNull.string('username');
+    t.nonNull.string('email');
+    t.nonNull.string('password');
+    t.nonNull.field('cart', {
+      type: 'Cart',
       resolve(parent, _args, _context): Promise<Cart[]> {
         return Cart.find({ where: { id: parent.cartId } });
       },

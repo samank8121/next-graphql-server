@@ -24,7 +24,7 @@ export class Cart extends BaseEntity {
 
   @OneToMany(() => CartProduct, (cartProduct) => cartProduct.cart)
   cartProducts!: CartProduct[];
-  
+
   @CreateDateColumn()
   createdAt: Date;
 
