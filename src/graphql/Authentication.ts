@@ -8,9 +8,9 @@ export const AuthenticationType = objectType({
   name: 'AuthenticationType',
   definition(t) {
     t.nonNull.string('token'),
-      t.nonNull.field('user', {
-        type: 'User',
-      });
+    t.nonNull.field('user', {
+      type: 'User',
+    });
   },
 });
 
@@ -68,22 +68,24 @@ export const AuthMutation = extendType({
         let user;
         let token;
         try {
-          const result = await context.conn
-            .createQueryBuilder()
-            .insert()
-            .into(User)
-            .values({
-              username,
-              password: hashedPassword,
-              email,
-            })
-            .returning('*')
-            .execute();
-          user = result.raw[0];
-          token = await jwt.sign(
-            { userId: user.id },
-            process.env.TOKEN_SECRET_KEY as jwt.Secret
-          );
+          await context.conn.transaction(async (transactionalEntityManager) => {
+            const result = await transactionalEntityManager
+              .createQueryBuilder()
+              .insert()
+              .into(User)
+              .values({
+                username,
+                password: hashedPassword,
+                email,
+              })
+              .returning('*')
+              .execute();
+            user = result.raw[0];
+            token = await jwt.sign(
+              { userId: user.id },
+              process.env.TOKEN_SECRET_KEY as jwt.Secret
+            );
+          });
         } catch (err) {
           console.log(err);
         }

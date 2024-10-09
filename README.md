@@ -5,4 +5,8 @@ add .env file with these keys:
 Execute:
 yarn watch & yarn dev
 
+## Inspired By
+This code is inspired by:
+https://github.com/mertakpinar29/apollo-graphql
+
 This project is node.js sample, this is a graphql backend which connect to postgresql I used typeorm & nexus for creating entities, query and mutations
