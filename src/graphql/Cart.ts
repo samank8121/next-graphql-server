@@ -31,8 +31,16 @@ export const CartsQuery = extendType({
   definition(t) {
     t.nonNull.list.nonNull.field('carts', {
       type: 'Cart',
-      resolve(_parent, _args, _context, _info): Promise<Cart[]> {
-        return Cart.find();
+      async resolve(_parent, _args, context: Context, _info): Promise<Cart[]> {
+        const { userId } = context;
+        if (!userId) {
+          throw new Error("Please logged in");
+        }
+        let cart = await Cart.find({
+          where: { userId: userId },
+          relations: ['cartProducts'],
+        });
+        return cart;
       },
     });
   },
