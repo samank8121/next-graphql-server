@@ -4,8 +4,8 @@ Add a `.env` file with the following keys:
 2. `TOKEN_SECRET_KEY` - Secret key for JSON Web Token
 
 To start the development server, run:
-```bash
-yarn watch & yarn dev
+`yarn watch & yarn dev`
+
 
 ## Inspired By
 This code is inspired by:
