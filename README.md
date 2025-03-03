@@ -18,3 +18,6 @@ For the front-end, refer to these projects:
 
 - [Next.js & React Query](https://github.com/samank8121/next-sample)
 - [React & Redux](https://github.com/samank8121/product-react-redux)
+
+## Author
+[Saman Kefayatpour](https://www.linkedin.com/in/samankefayatpour/)
