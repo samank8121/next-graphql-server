@@ -4,11 +4,12 @@ import { User } from './entities/User';
 import { Cart } from './entities/Cart';
 import dotenv from 'dotenv';
 import { CartProduct } from './entities/CartProduct';
+import { File } from './entities/File';
 
 dotenv.config();
 
 export default new DataSource({
-  entities: [Product, User, Cart, CartProduct],
+  entities: [File, Product, User, Cart, CartProduct],
   type: 'postgres',
   url: process.env.CONNECTION_STRING,
   synchronize: true,
